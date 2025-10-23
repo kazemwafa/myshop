@@ -2,51 +2,45 @@
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
-<title>پنل ادمین</title>
+<title>پنل ادمین فروشگاه</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>پنل ادمین</header>
+<header>
+  <h2>پنل مدیریت محصولات</h2>
+  <button class="btn" onclick="location.href='index.html'">🏠 بازگشت به فروشگاه</button>
+</header>
+
 <div class="container">
-  <input type="text" id="adminName" placeholder="نام محصول">
-  <input type="text" id="adminImg" placeholder="لینک عکس">
-  <input type="number" id="adminPrice" placeholder="قیمت">
-  <input type="text" id="adminDesc" placeholder="توضیح محصول">
-  <button onclick="addProductAdmin()">افزودن محصول</button>
-  <button onclick="location.href='index.html'">بازگشت به فروشگاه</button>
-  <div id="productList"></div>
+  <div id="loginArea">
+    <h3>ورود مدیر</h3>
+    <input type="password" id="adminPass" placeholder="رمز عبور (پیش‌فرض 1234)">
+    <button class="btn" onclick="doLogin()">ورود</button>
+  </div>
+
+  <div id="adminArea" style="display:none;">
+    <h3>افزودن محصول جدید</h3>
+    <input type="text" id="pName" placeholder="نام محصول">
+    <input type="number" id="pPrice" placeholder="قیمت (تومان)">
+    <input type="text" id="pCat" placeholder="دسته (مثلاً موبایل)">
+    <input type="text" id="pDesc" placeholder="توضیح کوتاه">
+    <input type="text" id="pImage" placeholder="آدرس عکس (URL)">
+    <input type="file" id="pImageFile" accept="image/*">
+    <button class="btn" onclick="addProductFromAdmin()">➕ افزودن محصول</button>
+    <hr>
+
+    <h3>لیست محصولات</h3>
+    <div id="adminList"></div>
+
+    <hr>
+    <button class="btn" onclick="exportData()">⬇️ خروجی JSON</button>
+    <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+    <button class="btn" onclick="logoutAdmin()">🚪 خروج از ادمین</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
-<script>
-const productListDiv=document.getElementById("productList");
-function renderAdminProducts(){
-  productListDiv.innerHTML="";
-  products.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="product";
-    div.innerHTML=`
-      <img src="${p.img}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <p>${p.price.toLocaleString()} افغانی</p>
-      <button onclick="deleteProduct(${p.id}); renderAdminProducts()">حذف</button>
-    `;
-    productListDiv.appendChild(div);
-  });
-}
-function addProductAdmin(){
-  const name=document.getElementById("adminName").value;
-  const img=document.getElementById("adminImg").value;
-  const price=parseInt(document.getElementById("adminPrice").value);
-  const desc=document.getElementById("adminDesc").value;
-  if(name && img && price && desc){
-    const id=products.length?products[products.length-1].id+1:1;
-    products.push({id,name,price,img,desc});
-    saveProducts();
-    renderAdminProducts();
-    alert("محصول اضافه شد!");
-  }else alert("تمام فیلدها را پر کنید!");
-}
-renderAdminProducts
 
+</body>
+</html>
