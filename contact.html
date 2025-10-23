@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تماس با ما</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.contact-form input, .contact-form textarea, .contact-form button {
+  width:95%; margin:10px auto; padding:10px; display:block; border-radius:6px; border:1px solid #ccc; font-size:16px;
+}
+.contact-form button { background:#27ae60; color:white; border:none; cursor:pointer; transition:0.3s; }
+.contact-form button:hover { background:#2ecc71; }
+</style>
+</head>
+<body>
+
+<header>تماس با ما</header>
+
+<div class="container page">
+  <h2>تماس با ما</h2>
+  <form class="contact-form" onsubmit="alert('پیام شما ارسال شد ✅'); return false;">
+    <input type="text" placeholder="نام و نام خانوادگی" required>
+    <input type="email" placeholder="ایمیل" required>
+    <textarea rows="5" placeholder="پیام شما" required></textarea>
+    <button type="submit">ارسال پیام</button>
+  </form>
+</div>
+
+</body>
+</html>

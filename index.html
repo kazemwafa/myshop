@@ -1,107 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>فروشگاه حرفه‌ای من</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فروشگاه من</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== اسلایدر حرفه‌ای ===== */
+.slider { position:relative; width:100%; max-width:1000px; margin:auto; overflow:hidden; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+.slides { display:flex; transition:transform 0.5s ease; }
+.slide { min-width:100%; position:relative; }
+.slide img { width:100%; height:200px; object-fit:cover; }
+.slider-buttons { position:absolute; top:50%; width:100%; display:flex; justify-content:space-between; transform:translateY(-50%); }
+.slider-buttons span { background:rgba(0,0,0,0.5); color:white; padding:8px 12px; cursor:pointer; border-radius:50%; font-size:18px; }
+</style>
 </head>
 <body>
-  <header>
-    <div class="header-left">
-      <div class="logo">WafaShop</div>
-      <div class="small">خوش آمدید</div>
-    </div>
 
-    <div class="search-wrap">
-      <input id="searchInput" placeholder="جستجو در محصولات...">
-      <button onclick="doSearch()">🔍</button>
-    </div>
+<header>فروشگاه من</header>
 
-    <div class="top-actions">
-      <button class="icon-btn" onclick="openAdmin()">پنل ادمین</button>
-      <button class="icon-btn" onclick="location.href='cart.html'">سبد (<span id="cartCount">0</span>)</button>
-    </div>
-  </header>
+<div class="container">
 
-  <div class="container">
-    <div class="hero">
-      <div class="slider panel" id="slider">
-        <!-- تصاویر اسلایدر -->
-      </div>
-      <aside class="sidebar panel">
-        <div class="categories">
-          <h4>دسته‌ها</h4>
-          <div id="cats"></div>
-        </div>
-        <hr>
-        <div>
-          <h4>فیلتر قیمت</h4>
-          <div class="filter-row">
-            <input id="minPrice" class="input" placeholder="از (تومان)" type="number">
-            <input id="maxPrice" class="input" placeholder="تا (تومان)" type="number">
-            <button class="btn" onclick="applyPriceFilter()">اعمال</button>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <div class="panel">
-      <div class="filter-row">
-        <div class="small">مرتب‌سازی:</div>
-        <select id="sortBy" class="input" onchange="renderProducts()">
-          <option value="default">پیش‌فرض</option>
-          <option value="price-asc">قیمت صعودی</option>
-          <option value="price-desc">قیمت نزولی</option>
-        </select>
-        <div style="flex:1"></div>
-        <button class="btn" onclick="exportData()">صدور محصولات</button>
-        <input type="file" id="importFile" style="display:none" onchange="importData(event)">
-        <button class="btn" onclick="document.getElementById('importFile').click()">درون‌ریزی محصولات</button>
-      </div>
-
-      <div id="productGrid" class="grid"></div>
+  <!-- اسلایدر حرفه‌ای -->
+  <div class="slider">
+    <div class="slides" id="slides"></div>
+    <div class="slider-buttons">
+      <span onclick="prevSlide()">❮</span>
+      <span onclick="nextSlide()">❯</span>
     </div>
   </div>
 
-  <button class="cart-fab" id="cartFab" onclick="location.href='cart.html'">سبد خرید • <span id="cartTotalFab">0 تومان</span></button>
+  <!-- دسته‌بندی محصولات -->
+  <h2 style="margin-top:20px;">محصولات ما</h2>
+  <div class="products" id="products"></div>
 
-  <!-- Modal product -->
-  <div id="modalRoot" style="display:none"></div>
+</div>
 
-  <!-- Admin modal -->
-  <div id="adminModal" style="display:none" class="modal-back">
-    <div class="modal">
-      <div class="admin-top">
-        <input id="adminPass" class="input" placeholder="رمز مدیر (پیش‌فرض: 1234)">
-        <button class="btn" onclick="doLogin()">ورود</button>
-        <button class="btn" onclick="closeAdmin()">بستن</button>
-      </div>
-      <hr>
-      <div id="adminArea" style="display:none">
-        <h3>مدیریت محصولات</h3>
-        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px">
-          <input id="pName" class="input" placeholder="نام محصول">
-          <input id="pPrice" class="input" placeholder="قیمت" type="number">
-        </div>
-        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px">
-          <input id="pCat" class="input" placeholder="دسته">
-          <input id="pDiscount" class="input" placeholder="تخفیف (مثلاً 10 برای 10%)">
-        </div>
-        <textarea id="pDesc" class="input" placeholder="توضیحات"></textarea>
-        <div style="display:flex; gap:8px; margin-top:8px">
-          <input type="file" id="pImageFile" accept="image/*">
-          <input id="pImage" class="input" placeholder="لینک تصویر (اختیاری)">
-          <button class="btn" onclick="addProductFromAdmin()">افزودن</button>
-        </div>
-        <hr>
-        <div id="adminList"></div>
-        <hr>
-        <button class="btn" onclick="logoutAdmin()">خروج</button>
-      </div>
-    </div>
-  </div>
+<!-- دکمه سبد خرید -->
+<div id="cartBtn" onclick="location.href='cart.html'"></div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+<script>
+// ===== اسلایدر ساده =====
+const slidesData = [
+  "https://via.placeholder.com/800x200?text=محصول+ویژه+۱",
+  "https://via.placeholder.com/800x200?text=محصول+ویژه+۲",
+  "https://via.placeholder.com/800x200?text=محصول+ویژه+۳"
+];
+let currentSlide = 0;
+const slidesDiv = document.getElementById("slides");
+function renderSlides(){
+  slidesDiv.innerHTML = "";
+  slidesData.forEach(url=>{
+    const div=document.createElement("div");
+    div.className="slide";
+    div.innerHTML=`<img src="${url}" alt="slide">`;
+    slidesDiv.appendChild(div);
+  });
+  updateSlidePosition();
+}
+function updateSlidePosition(){
+  slidesDiv.style.transform = `translateX(-${currentSlide*100}%)`;
+}
+function nextSlide(){
+  currentSlide = (currentSlide+1)%slidesData.length;
+  updateSlidePosition();
+}
+function prevSlide(){
+  currentSlide = (currentSlide-1+slidesData.length)%slidesData.length;
+  updateSlidePosition();
+}
+renderSlides();
+
+// ===== محصولات =====
+const productsDiv=document.getElementById("products");
+function renderProducts(){
+  productsDiv.innerHTML="";
+  products.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="product";
+    div.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>${p.price.toLocaleString()} AFN</p>
+      <button onclick="location.href='product.html?id=${p.id}'">جزئیات</button>
+    `;
+    productsDiv.appendChild(div);
+  });
+}
+renderProducts();
+updateCartButton();
+</script>
+
 </body>
 </html>

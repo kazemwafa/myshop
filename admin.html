@@ -2,45 +2,43 @@
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
-<title>پنل ادمین حرفه‌ای</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل ادمین</title>
 <link rel="stylesheet" href="style.css">
+<style>
+#loginArea, #adminArea {
+  max-width:500px; margin:20px auto; padding:20px; background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+#loginArea input, #adminArea input, #adminArea button { display:block; width:95%; margin:10px auto; padding:10px; font-size:16px; border-radius:6px; border:1px solid #ccc; }
+#adminArea button { background:#27ae60; color:white; border:none; cursor:pointer; transition:0.3s; }
+#adminArea button:hover { background:#2ecc71; }
+#adminList .card-edit { display:flex; justify-content:space-between; align-items:center; background:#f4f4f4; margin:8px 0; padding:8px 12px; border-radius:6px; box-shadow:0 0 5px rgba(0,0,0,0.1); }
+#adminList .card-edit span { font-weight:bold; }
+.logout-btn { background:#e74c3c; color:white; width:100%; margin-top:10px; }
+.logout-btn:hover { background:#c0392b; }
+</style>
 </head>
 <body>
 
-<header>
-  <h2 style="text-align:center;">پنل مدیریت فروشگاه</h2>
-  <button class="btn" onclick="location.href='index.html'">🏠 بازگشت به فروشگاه</button>
-</header>
+<header>پنل ادمین</header>
 
 <div class="container">
 
-  <!-- بخش ورود مدیر -->
+  <!-- ورود با رمز -->
   <div id="loginArea">
-    <h3>ورود مدیر</h3>
-    <input type="password" id="adminPass" placeholder="رمز عبور">
+    <input type="password" id="adminPass" placeholder="رمز ورود ادمین">
     <button onclick="doLogin()">ورود</button>
   </div>
 
-  <!-- بخش مدیریت محصولات -->
+  <!-- پنل ادمین -->
   <div id="adminArea" style="display:none;">
-    <h3>افزودن محصول جدید</h3>
     <input type="text" id="pName" placeholder="نام محصول">
-    <input type="number" id="pPrice" placeholder="قیمت (تومان)">
-    <input type="text" id="pCat" placeholder="دسته (مثلاً موبایل)">
-    <input type="text" id="pDesc" placeholder="توضیح کوتاه">
-    <input type="text" id="pImage" placeholder="آدرس عکس (URL)">
-    <input type="file" id="pImageFile" accept="image/*">
-    <button onclick="addProductFromAdmin()">➕ افزودن محصول</button>
-
-    <hr>
-
-    <h3>لیست محصولات</h3>
+    <input type="text" id="pImage" placeholder="لینک عکس">
+    <input type="number" id="pPrice" placeholder="قیمت (AFN)">
+    <input type="text" id="pDesc" placeholder="توضیحات محصول">
+    <button onclick="addProductFromAdmin()">افزودن محصول</button>
     <div id="adminList"></div>
-
-    <hr>
-    <button onclick="exportData()">⬇️ خروجی JSON</button>
-    <input type="file" id="importFile" accept=".json" onchange="importData(event)">
-    <button onclick="logoutAdmin()">🚪 خروج از ادمین</button>
+    <button class="logout-btn" onclick="logoutAdmin()">خروج</button>
   </div>
 
 </div>

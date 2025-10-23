@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرداخت</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.checkout-page { max-width:500px; margin:50px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); text-align:center; }
+.checkout-page h2 { margin-bottom:20px; }
+.checkout-page p { font-size:18px; margin-bottom:15px; }
+.checkout-page input { width:95%; padding:10px; margin:10px auto; display:block; border-radius:6px; border:1px solid #ccc; font-size:16px; }
+.checkout-page button { padding:12px 20px; background:#27ae60; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px; transition:0.3s; }
+.checkout-page button:hover { background:#2ecc71; }
+</style>
+</head>
+<body>
+
+<header>پرداخت</header>
+
+<div class="container checkout-page">
+  <h2>پرداخت سبد خرید</h2>
+  <p id="totalAmount">جمع کل: 0 AFN</p>
+  
+  <input type="text" placeholder="نام صاحب کارت" required>
+  <input type="text" placeholder="شماره کارت" required>
+  <input type="text" placeholder="تاریخ انقضا" required>
+  <input type="text" placeholder="CVV" required>
+  
+  <button onclick="payNow()">پرداخت</button>
+</div>
+
+<script src="script.js"></script>
+<script>
+function payNow(){
+  const total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
+  if(total===0){ alert("سبد خرید خالی است!"); return; }
+  alert(`پرداخت با موفقیت انجام شد ✅\nجمع کل: ${total.toLocaleString()} AFN`);
+  cart=[];
+  saveCart();
+  updateCartButton();
+  location.href='index.html';
+}
+// نمایش جمع کل
+document.getElementById("totalAmount").textContent = `جمع کل: ${cart.reduce((sum,i)=>sum+i.price*i.qty,0).toLocaleString()} AFN`;
+</script>
+
+</body>
+</html>
