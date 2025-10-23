@@ -78,3 +78,49 @@ header{
 .admin-top{display:flex; gap:8px; align-items:center; justify-content:flex-end}
 .input{width:100%; padding:8px; border-radius:8px; border:1px solid #eee}
 .card-edit{display:flex; gap:8px; align-items:center; justify-content:space-between}
+/* ====== پنل ادمین حرفه‌ای ====== */
+#loginArea, #adminArea {
+  background: #fff;
+  padding: 20px;
+  margin: 15px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.25);
+  max-width: 500px;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+
+#adminArea input, #adminArea button {
+  display: block;
+  width: 95%;
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#adminArea button {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#adminArea button:hover { background: #2ecc71; }
+
+#adminList .card-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f4f4;
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+#adminList .card-edit span { color: #000; font-weight: bold; }
+
+#adminArea hr { margin: 20px 0; border: 0; border-top: 1px solid #ccc; }
+

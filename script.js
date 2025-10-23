@@ -205,3 +205,92 @@ renderCategories();
 renderProducts();
 renderSlider();
 updateCartUI();
+function doLogin() {
+  const pass = document.getElementById("adminPass").value;
+  if(pass === "5790") {    // رمز جدید
+    document.getElementById("loginArea").style.display="none";
+    document.getElementById("adminArea").style.display="block";
+    renderAdminList();
+  } else alert("رمز اشتباه است!");
+}
+
+function logoutAdmin() {
+  document.getElementById("adminArea").style.display="none";
+  document.getElementById("loginArea").style.display="block";
+}
+
+// افزودن محصول از پنل ادمین
+function addProductFromAdmin(){
+  let name=document.getElementById("pName").value.trim();
+  let price=parseInt(document.getElementById("pPrice").value);
+  let cat=document.getElementById("pCat").value.trim()||"عمومی";
+  let desc=document.getElementById("pDesc").value.trim();
+  let img=document.getElementById("pImage").value.trim();
+  const file=document.getElementById("pImageFile").files[0];
+  if(file){
+    let reader=new FileReader();
+    reader.onload=e=>{
+      saveNewProduct(name,price,cat,desc,e.target.result);
+    };
+    reader.readAsDataURL(file);
+  } else saveNewProduct(name,price,cat,desc,img);
+}
+
+function saveNewProduct(name,price,cat,desc,img){
+  if(!name || !price){alert("نام و قیمت لازم است");return;}
+  let id=Date.now();
+  products.push({id,name,price,cat,desc,img});
+  localStorage.setItem("products",JSON.stringify(products));
+  renderAdminList();
+  renderCategories();
+  renderProducts();
+}
+
+// نمایش لیست محصولات در پنل
+function renderAdminList(){
+  const div=document.getElementById("adminList");
+  div.innerHTML="";
+  products.forEach(p=>{
+    let el=document.createElement("div");
+    el.className="card-edit";
+    el.innerHTML=`<span>${p.name}</span>
+                  <button onclick="deleteProduct(${p.id})">حذف</button>`;
+    div.appendChild(el);
+  });
+}
+
+// حذف محصول
+function deleteProduct(id){
+  products=products.filter(p=>p.id!==id);
+  localStorage.setItem("products",JSON.stringify(products));
+  renderAdminList();
+  renderProducts();
+}
+
+// خروجی و درون‌ریزی JSON
+function exportData(){
+  let blob=new Blob([JSON.stringify(products)],{type:"application/json"});
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="products.json";
+  a.click();
+}
+
+function importData(e){
+  let file=e.target.files[0];
+  if(!file) return;
+  let reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      let arr=JSON.parse(ev.target.result);
+      products=arr;
+      localStorage.setItem("products",JSON.stringify(products));
+      renderCategories();
+      renderProducts();
+      renderAdminList();
+      alert("درون‌ریزی موفق بود");
+    } catch { alert("فایل نامعتبر است"); }
+  };
+  reader.readAsText(file);
+}
+

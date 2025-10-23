@@ -2,23 +2,26 @@
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
-<title>پنل ادمین فروشگاه</title>
+<title>پنل ادمین حرفه‌ای</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h2>پنل مدیریت محصولات</h2>
+  <h2 style="text-align:center;">پنل مدیریت فروشگاه</h2>
   <button class="btn" onclick="location.href='index.html'">🏠 بازگشت به فروشگاه</button>
 </header>
 
 <div class="container">
+
+  <!-- بخش ورود مدیر -->
   <div id="loginArea">
     <h3>ورود مدیر</h3>
-    <input type="password" id="adminPass" placeholder="رمز عبور (پیش‌فرض 1234)">
-    <button class="btn" onclick="doLogin()">ورود</button>
+    <input type="password" id="adminPass" placeholder="رمز عبور">
+    <button onclick="doLogin()">ورود</button>
   </div>
 
+  <!-- بخش مدیریت محصولات -->
   <div id="adminArea" style="display:none;">
     <h3>افزودن محصول جدید</h3>
     <input type="text" id="pName" placeholder="نام محصول">
@@ -27,20 +30,21 @@
     <input type="text" id="pDesc" placeholder="توضیح کوتاه">
     <input type="text" id="pImage" placeholder="آدرس عکس (URL)">
     <input type="file" id="pImageFile" accept="image/*">
-    <button class="btn" onclick="addProductFromAdmin()">➕ افزودن محصول</button>
+    <button onclick="addProductFromAdmin()">➕ افزودن محصول</button>
+
     <hr>
 
     <h3>لیست محصولات</h3>
     <div id="adminList"></div>
 
     <hr>
-    <button class="btn" onclick="exportData()">⬇️ خروجی JSON</button>
+    <button onclick="exportData()">⬇️ خروجی JSON</button>
     <input type="file" id="importFile" accept=".json" onchange="importData(event)">
-    <button class="btn" onclick="logoutAdmin()">🚪 خروج از ادمین</button>
+    <button onclick="logoutAdmin()">🚪 خروج از ادمین</button>
   </div>
+
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
