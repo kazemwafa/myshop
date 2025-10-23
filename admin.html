@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>پنل ادمین</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>پنل ادمین</header>
+<div class="container">
+  <input type="text" id="adminName" placeholder="نام محصول">
+  <input type="text" id="adminImg" placeholder="لینک عکس">
+  <input type="number" id="adminPrice" placeholder="قیمت">
+  <input type="text" id="adminDesc" placeholder="توضیح محصول">
+  <button onclick="addProductAdmin()">افزودن محصول</button>
+  <button onclick="location.href='index.html'">بازگشت به فروشگاه</button>
+  <div id="productList"></div>
+</div>
+
+<script src="script.js"></script>
+<script>
+const productListDiv=document.getElementById("productList");
+function renderAdminProducts(){
+  productListDiv.innerHTML="";
+  products.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="product";
+    div.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>${p.price.toLocaleString()} افغانی</p>
+      <button onclick="deleteProduct(${p.id}); renderAdminProducts()">حذف</button>
+    `;
+    productListDiv.appendChild(div);
+  });
+}
+function addProductAdmin(){
+  const name=document.getElementById("adminName").value;
+  const img=document.getElementById("adminImg").value;
+  const price=parseInt(document.getElementById("adminPrice").value);
+  const desc=document.getElementById("adminDesc").value;
+  if(name && img && price && desc){
+    const id=products.length?products[products.length-1].id+1:1;
+    products.push({id,name,price,img,desc});
+    saveProducts();
+    renderAdminProducts();
+    alert("محصول اضافه شد!");
+  }else alert("تمام فیلدها را پر کنید!");
+}
+renderAdminProducts
+

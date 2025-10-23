@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>جزئیات محصول</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>جزئیات محصول</header>
+<div class="container">
+  <div id="productDetail"></div>
+</div>
+<div id="cartBtn" onclick="location.href='cart.html'"></div>
+
+<script src="script.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const id = parseInt(urlParams.get("id"));
+const prod = products.find(p=>p.id===id);
+const div=document.getElementById("productDetail");
+if(prod){
+  div.innerHTML=`
+    <img src="${prod.img}" alt="${prod.name}">
+    <h3>${prod.name}</h3>
+    <p>${prod.price.toLocaleString()} افغانی</p>
+    <p>${prod.desc}</p>
+    <button onclick="addToCart(${prod.id}); alert('محصول به سبد خرید اضافه شد!')">افزودن به سبد خرید</button>
+  `;
+}
+updateCartButton();
+</script>
+
+</body>
+</html>

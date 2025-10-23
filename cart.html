@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>سبد خرید</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>سبد خرید</header>
+<div class="container">
+  <div id="cartList"></div>
+  <p id="cartTotal"></p>
+  <button onclick="checkout()">تکمیل خرید</button>
+  <button onclick="location.href='index.html'">بازگشت به فروشگاه</button>
+</div>
+
+<script src="script.js"></script>
+<script>
+function renderCartPage(){
+  const cartDiv=document.getElementById("cartList");
+  cartDiv.innerHTML="";
+  let total=0;
+  cart.forEach(item=>{
+    total+=item.price*item.qty;
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`
+      <img src="${item.img}" alt="${item.name}">
+      <h4>${item.name}</h4>
+      <p>${item.price.toLocaleString()} × 
+         <button class="qty-btn" onclick="changeQty(${item.id},-1)">-</button>
+         ${item.qty}
+         <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+       افغانی
+      </p>
+      <button onclick="removeCart(${item.id})">حذف</button>
+    `;
+    cartDiv.appendChild(div);
+  });
+  document.getElementById("cartTotal").textContent=`جمع کل: ${total.toLocaleString()}افغانی`;
+}
+function checkout(){
+  if(cart.length===0){ alert("سبد خرید خالی است!"); return; }
+  alert(`خرید با موفقیت انجام شد!\nجمع کل: ${cart.reduce((sum,i)=>sum+i.price*i.qty,0).toLocaleString()} افغانی`);
+  cart=[];
+  saveCart();
+  renderCartPage();
+  updateCartButton();
+}
+renderCartPage();
+updateCartButton();
+</script>
+
+</body>
+</html>
