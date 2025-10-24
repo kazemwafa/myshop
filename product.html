@@ -5,41 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>جزئیات محصول</title>
 <link rel="stylesheet" href="style.css">
-<style>
-.product-detail { display:flex; flex-direction:column; align-items:center; margin-top:20px; }
-.product-detail img { width:90%; max-width:300px; border-radius:10px; margin-bottom:15px; }
-.product-detail h2 { margin-bottom:10px; }
-.product-detail p { margin-bottom:10px; font-weight:bold; text-align:center; }
-.product-detail button { width:60%; }
-</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="script.js"></script>
 </head>
 <body>
 
 <header>جزئیات محصول</header>
 
+<nav class="nav-bar">
+  <a href="index.html">خانه</a>
+  <a href="cart.html">سبد خرید</a>
+</nav>
+
 <div class="container">
-  <div id="productDetail" class="product-detail"></div>
+  <div id="productDetail"></div>
 </div>
 
 <div id="cartBtn" onclick="location.href='cart.html'"></div>
 
-<script src="script.js"></script>
 <script>
-// دریافت id از URL
-const urlParams = new URLSearchParams(window.location.search);
-const id = parseInt(urlParams.get("id"));
-const prod = products.find(p=>p.id===id);
-const div=document.getElementById("productDetail");
-
-if(prod){
-  div.innerHTML=`
-    <img src="${prod.img}" alt="${prod.name}">
-    <h2>${prod.name}</h2>
-    <p>قیمت: ${prod.price.toLocaleString()} AFN</p>
-    <p>${prod.desc}</p>
-    <button onclick="addToCart(${prod.id}); alert('محصول به سبد خرید اضافه شد ✅')">افزودن به سبد خرید</button>
-  `;
-}
+renderProductDetail();
 updateCartButton();
 </script>
 

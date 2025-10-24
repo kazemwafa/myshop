@@ -1,92 +1,197 @@
-// ===== داده‌ها =====
-let products = JSON.parse(localStorage.getItem("products")) || [
-  {id:1,name:"محصول ۱",price:1000,img:"https://via.placeholder.com/150",desc:"توضیح محصول ۱"},
-  {id:2,name:"محصول ۲",price:2000,img:"https://via.placeholder.com/150",desc:"توضیح محصول ۲"}
-];
+// ================= Firebase Config =================
+const firebaseConfig = {
+  apiKey: "API_KEY_HERE",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://PROJECT_ID.firebaseio.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// ================= مدیریت محصولات =================
+let products = [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ===== ذخیره =====
-function saveProducts(){ localStorage.setItem("products",JSON.stringify(products)); }
-function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); }
+// دریافت محصولات از Firebase
+function loadProducts(){
+  db.ref("products").on("value", snapshot=>{
+    products = [];
+    snapshot.forEach(item=>{
+      let p = item.val();
+      p.id = item.key;
+      products.push(p);
+    });
+    renderProducts();
+    renderAdminProducts();
+    updateCartButton();
+  });
+}
 
-// ===== سبد خرید =====
+// ================= سبد خرید =================
+function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
+
 function updateCartButton(){
   let total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
   const btn=document.getElementById("cartBtn");
   if(btn) btn.textContent=`سبد خرید: ${total.toLocaleString()} AFN`;
 }
-updateCartButton();
-function addToCart(id,qty=1){
+
+// افزودن به سبد خرید
+function addToCart(id, qty=1){
   const prod = products.find(p=>p.id===id);
+  if(!prod) return;
   const exist = cart.find(c=>c.id===id);
   if(exist){ exist.qty+=qty; } else { cart.push({...prod, qty}); }
   saveCart();
   updateCartButton();
+  alert("محصول به سبد خرید اضافه شد ✅");
 }
+
+// حذف از سبد خرید
 function removeCart(id){
-  cart=cart.filter(c=>c.id!==id);
+  cart = cart.filter(c=>c.id!==id);
   saveCart();
   updateCartButton();
+  renderCartPage();
 }
-function changeQty(id,delta){
+
+// تغییر تعداد
+function changeQty(id, delta){
   const item = cart.find(c=>c.id===id);
   if(item){
     item.qty += delta;
-    if(item.qty<1) item.qty=1;
+    if(item.qty<1) item.qty = 1;
     saveCart();
     updateCartButton();
-    renderCartPage && renderCartPage();
+    renderCartPage();
   }
 }
 
-// ===== پنل ادمین =====
-function doLogin() {
-  const pass = document.getElementById("adminPass").value;
-  if(pass==="5790"){
+// ================= پنل ادمین =================
+const ADMIN_PASSWORD = "5790";
+
+function doLogin(){
+  const val = document.getElementById("adminPass").value;
+  if(val === ADMIN_PASSWORD){
     document.getElementById("loginArea").style.display="none";
     document.getElementById("adminArea").style.display="block";
-    renderAdminList();
   } else alert("رمز اشتباه است!");
 }
-function logoutAdmin(){
-  document.getElementById("adminArea").style.display="none";
-  document.getElementById("loginArea").style.display="block";
-}
+
+// افزودن محصول از پنل ادمین
 function addProductFromAdmin(){
-  let name=document.getElementById("pName").value.trim();
-  let price=parseInt(document.getElementById("pPrice").value);
-  let desc=document.getElementById("pDesc").value.trim();
-  let img=document.getElementById("pImage").value.trim();
-  if(!name||!price){alert("نام و قیمت لازم است"); return;}
-  let id=Date.now();
-  products.push({id,name,price,desc,img});
-  saveProducts();
-  renderAdminList();
-}
-function renderAdminList(){
-  const div=document.getElementById("adminList");
-  if(!div) return;
-  div.innerHTML="";
-  products.forEach(p=>{
-    let el=document.createElement("div");
-    el.className="card-edit";
-    el.innerHTML=`<span>${p.name}</span> <button onclick="deleteProduct(${p.id})">حذف</button>`;
-    div.appendChild(el);
-  });
-}
-function deleteProduct(id){
-  products=products.filter(p=>p.id!==id);
-  saveProducts();
-  renderAdminList();
+  const name = document.getElementById("pName").value;
+  const img = document.getElementById("pImage").value;
+  const price = parseInt(document.getElementById("pPrice").value);
+  const desc = document.getElementById("pDesc").value;
+  if(name && img && price && desc){
+    const newProd = {name,img,price,desc};
+    db.ref("products").push(newProd);
+    alert("محصول اضافه شد ✅");
+    document.getElementById("pName").value="";
+    document.getElementById("pImage").value="";
+    document.getElementById("pPrice").value="";
+    document.getElementById("pDesc").value="";
+  } else alert("تمام فیلدها را پر کنید!");
 }
 
-// ===== پرداخت سبد =====
-function checkout(){
-  if(cart.length===0){ alert("سبد خرید خالی است!"); return; }
-  let total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
-  alert(`پرداخت با موفقیت ✅\nجمع کل: ${total.toLocaleString()} AFN`);
-  cart=[];
-  saveCart();
-  renderCartPage && renderCartPage();
-  updateCartButton();
+// حذف محصول از پنل ادمین
+function deleteProduct(id){
+  db.ref("products/"+id).remove();
 }
+
+// نمایش محصولات در پنل ادمین
+function renderAdminProducts(){
+  const div = document.getElementById("adminList");
+  if(!div) return;
+  div.innerHTML = "";
+  products.forEach(p=>{
+    const card = document.createElement("div");
+    card.className="card-edit";
+    card.innerHTML=`
+      <span>${p.name} - ${p.price.toLocaleString()} AFN</span>
+      <button onclick="deleteProduct('${p.id}')">حذف</button>
+    `;
+    div.appendChild(card);
+  });
+}
+
+// خروج از پنل ادمین
+function logoutAdmin(){
+  document.getElementById("loginArea").style.display="block";
+  document.getElementById("adminArea").style.display="none";
+}
+
+// ================= رندر محصولات =================
+function renderProducts(){
+  const div = document.getElementById("products");
+  if(!div) return;
+  div.innerHTML = "";
+  products.forEach(p=>{
+    const card = document.createElement("div");
+    card.className="product";
+    card.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>${p.price.toLocaleString()} AFN</p>
+      <button onclick="location.href='product.html?id=${p.id}'">جزئیات</button>
+    `;
+    div.appendChild(card);
+  });
+}
+
+// ================= صفحه جزئیات محصول =================
+function renderProductDetail(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  const prod = products.find(p=>p.id===id);
+  const div = document.getElementById("productDetail");
+  if(!div || !prod) return;
+  div.innerHTML=`
+    <img src="${prod.img}" alt="${prod.name}">
+    <h2>${prod.name}</h2>
+    <p>قیمت: ${prod.price.toLocaleString()} AFN</p>
+    <p>${prod.desc}</p>
+    <button onclick="addToCart('${prod.id}')">افزودن به سبد خرید</button>
+  `;
+}
+
+// ================= صفحه سبد خرید =================
+function renderCartPage(){
+  const cartDiv = document.getElementById("cartList");
+  if(!cartDiv) return;
+  cartDiv.innerHTML="";
+  let total=0;
+  cart.forEach(item=>{
+    total+=item.price*item.qty;
+    const div = document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+        <p>${item.price.toLocaleString()} AFN × 
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">-</button>
+          ${item.qty}
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+        </p>
+      </div>
+      <button class="remove-btn" onclick="removeCart('${item.id}')">حذف</button>
+    `;
+    cartDiv.appendChild(div);
+  });
+  const totalDiv = document.getElementById("cartTotal");
+  if(totalDiv) totalDiv.textContent=`جمع کل: ${total.toLocaleString()} AFN`;
+}
+
+// ================= اجرا =================
+loadProducts();
+updateCartButton();
+renderCartPage();
+renderProductDetail();
+
