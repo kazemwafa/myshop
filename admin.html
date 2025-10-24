@@ -1,40 +1,50 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل ادمین</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="script.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>پنل ادمین</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="logo" onclick="location.href='index.html'">پنل ادمین</h1>
+      <nav class="main-nav"><a href="index.html">بازگشت به فروشگاه</a></nav>
+    </div>
+  </header>
 
-<header>پنل ادمین</header>
+  <main class="container admin-container">
+    <section id="loginArea" class="admin-login">
+      <h2>ورود ادمین</h2>
+      <input id="adminPass" type="password" placeholder="رمز عبور">
+      <button onclick="doLogin()">ورود</button>
+    </section>
 
-<div class="container">
+    <section id="adminArea" class="admin-area" style="display:none">
+      <div class="admin-top">
+        <h2>مدیریت محصولات</h2>
+        <button onclick="logoutAdmin()">خروج</button>
+      </div>
 
-  <div id="loginArea">
-    <input type="password" id="adminPass" placeholder="رمز ورود ادمین">
-    <button onclick="doLogin()">ورود</button>
-  </div>
+      <div class="admin-form">
+        <input id="pName" type="text" placeholder="نام محصول">
+        <input id="pImage" type="text" placeholder="آدرس تصویر (URL)">
+        <input id="pPrice" type="number" placeholder="قیمت (AFN)">
+        <textarea id="pDesc" placeholder="توضیحات"></textarea>
+        <button onclick="addProductFromAdmin()">افزودن محصول</button>
+      </div>
 
-  <div id="adminArea" style="display:none;">
-    <input type="text" id="pName" placeholder="نام محصول">
-    <input type="text" id="pImage" placeholder="لینک عکس">
-    <input type="number" id="pPrice" placeholder="قیمت (AFN)">
-    <input type="text" id="pDesc" placeholder="توضیحات محصول">
-    <button onclick="addProductFromAdmin()">افزودن محصول</button>
-    <div id="adminList"></div>
-    <button onclick="logoutAdmin()">خروج</button>
-  </div>
+      <div id="adminList" class="admin-list">
+        <!-- توسط renderAdminProducts() پر می‌شود -->
+      </div>
+    </section>
+  </main>
 
-</div>
+  <footer class="site-footer"><div class="container"><p>© پنل ادمین</p></div></footer>
 
-<script>
-loadProducts();
-</script>
-
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

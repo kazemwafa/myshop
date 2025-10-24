@@ -1,48 +1,66 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پرداخت</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="script.js"></script>
-<style>
-.checkout-container {
-  max-width:500px; margin:50px auto; padding:20px; background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
-}
-.checkout-container h2{margin-bottom:20px;text-align:center;}
-.checkout-container input{width:95%; padding:10px; margin:10px auto; display:block; border-radius:6px; border:1px solid #ccc;}
-.checkout-container button{padding:12px 20px; background:#27ae60; color:white; border:none; border-radius:8px; cursor:pointer; width:100%; font-size:16px;}
-.checkout-container button:hover{background:#2ecc71;}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تسویه حساب</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="logo" onclick="location.href='index.html'">تسویه حساب</h1>
+      <nav class="main-nav"><button id="cartBtn" onclick="location.href='cart.html'">سبد خرید</button></nav>
+    </div>
+  </header>
 
-<header>پرداخت</header>
-<div class="container checkout-container">
-  <h2>پرداخت سبد خرید</h2>
-  <p id="totalAmount">جمع کل: 0 AFN</p>
-  
-  <input type="text" placeholder="نام صاحب کارت">
-  <input type="text" placeholder="شماره کارت">
-  <input type="text" placeholder="تاریخ انقضا">
-  <input type="text" placeholder="CVV">
-  
-  <button onclick="payNow()">پرداخت</button>
-</div>
+  <main class="container">
+    <h2>اطلاعات خریدار</h2>
+    <form id="checkoutForm" onsubmit="submitOrder(event)">
+      <label>نام و نام خانوادگی</label>
+      <input id="cName" required>
+      <label>شماره تماس</label>
+      <input id="cPhone" required>
+      <label>آدرس</label>
+      <textarea id="cAddress" required></textarea>
+      <button type="submit">ثبت سفارش و پرداخت</button>
+    </form>
+  </main>
 
-<script>
-function payNow(){
-  const total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
-  if(total===0){ alert("سبد خرید خالی است!"); return; }
-  alert(`پرداخت با موفقیت انجام شد ✅\nجمع کل: ${total.toLocaleString()} AFN`);
-  cart=[]; saveCart(); updateCartButton(); location.href='index.html';
-}
+  <footer class="site-footer"><div class="container"><p>© فروشگاه</p></div></footer>
 
-document.getElementById("totalAmount").textContent = `جمع کل: ${cart.reduce((sum,i)=>sum+i.price*i.qty,0).toLocaleString()} AFN`;
-</script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 
+  <script>
+    // تابع ثبت سفارش - از cart در localStorage استفاده می‌کند و در مسیر orders در Realtime DB ذخیره می‌کند
+    function submitOrder(e){
+      e.preventDefault();
+      const name = document.getElementById('cName').value.trim();
+      const phone = document.getElementById('cPhone').value.trim();
+      const address = document.getElementById('cAddress').value.trim();
+      const cartLocal = JSON.parse(localStorage.getItem('cart')) || [];
+      if(cartLocal.length === 0){ alert('سبد خرید خالی است'); return; }
+      const total = cartLocal.reduce((s,i)=>s + i.price * i.qty,0);
+      const order = {
+        customer: { name, phone, address },
+        items: cartLocal,
+        total,
+        createdAt: Date.now()
+      };
+      const ordersRef = firebase.database().ref('orders');
+      ordersRef.push(order)
+        .then(()=> {
+          alert('سفارش شما ثبت شد ✅');
+          localStorage.removeItem('cart');
+          location.href = 'index.html';
+        })
+        .catch(err=> {
+          console.error(err);
+          alert('خطا در ثبت سفارش، دوباره تلاش کنید.');
+        });
+    }
+  </script>
 </body>
 </html>

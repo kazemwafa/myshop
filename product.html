@@ -1,33 +1,78 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جزئیات محصول</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="script.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>جزئیات محصول</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="logo" onclick="location.href='index.html'">فروشگاه من</h1>
+      <nav class="main-nav">
+        <a href="index.html">خانه</a>
+        <button id="cartBtn" onclick="location.href='cart.html'">سبد خرید: 0 AFN</button>
+      </nav>
+    </div>
+  </header>
 
-<header>جزئیات محصول</header>
+  <main class="container">
+    <section id="productDetail" class="product-detail">
+      <!-- توسط renderProductDetail() پر می‌شود -->
+    </section>
+  </main>
 
-<nav class="nav-bar">
-  <a href="index.html">خانه</a>
-  <a href="cart.html">سبد خرید</a>
-</nav>
+  <footer class="site-footer">
+    <div class="container"><p>© فروشگاه</p></div>
+  </footer>
 
-<div class="container">
-  <div id="productDetail"></div>
-</div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
 
-<div id="cartBtn" onclick="location.href='cart.html'"></div>
 
-<script>
-renderProductDetail();
-updateCartButton();
-</script>
+---
 
+3) cart.html — صفحه سبد خرید
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>سبد خرید</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="logo" onclick="location.href='index.html'">فروشگاه من</h1>
+      <nav class="main-nav">
+        <a href="index.html">خانه</a>
+        <button id="cartBtn" onclick="location.href='cart.html'">سبد خرید: 0 AFN</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>سبد خرید شما</h2>
+    <div id="cartList" class="cart-list">
+      <!-- توسط renderCartPage() پر می‌شود -->
+    </div>
+
+    <div class="cart-summary">
+      <p id="cartTotal">جمع کل: 0 AFN</p>
+      <button onclick="location.href='checkout.html'">تسویه حساب</button>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>© فروشگاه</p></div></footer>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

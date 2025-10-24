@@ -1,28 +1,20 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!-- contact.html -->
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تماس با ما</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تماس با ما</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header>تماس با ما</header>
-
-<nav class="nav-bar">
-  <a href="index.html">خانه</a>
-  <a href="cart.html">سبد خرید</a>
-  <a href="about.html">درباره ما</a>
-</nav>
-
-<div class="container">
-  <h2>فرم تماس</h2>
-  <input type="text" placeholder="نام شما">
-  <input type="email" placeholder="ایمیل">
-  <textarea placeholder="پیام شما" style="width:95%; padding:10px; margin:10px auto; display:block; border-radius:6px; border:1px solid #ccc;"></textarea>
-  <button onclick="alert('پیام شما ارسال شد ✅')">ارسال</button>
-</div>
-
+  <header class="site-header"><div class="container header-inner"><h1 class="logo" onclick="location.href='index.html'">تماس با ما</h1></div></header>
+  <main class="container">
+    <h2>تماس</h2>
+    <p>ایمیل: info@example.com</p>
+    <p>تلفن: 00-0000000</p>
+  </main>
+  <footer class="site-footer"><div class="container"><p>© فروشگاه</p></div></footer>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
