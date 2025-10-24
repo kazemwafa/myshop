@@ -1,0 +1,161 @@
+body {
+  font-family: "IRANSans", "Poppins", sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* 🔺 هدر */
+header {
+  background: #d32f2f;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔹 نوار منو */
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-bar a {
+  color: #444;
+  padding: 12px 18px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.nav-bar a:hover {
+  color: #d32f2f;
+  border-bottom: 3px solid #d32f2f;
+}
+
+/* 🛍️ محصولات */
+.container {
+  padding: 20px;
+}
+
+.products,
+.cart-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.product,
+.cart-item {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.product img,
+.cart-item img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* 🔘 دکمه‌ها */
+button,
+.admin-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button {
+  background: #d32f2f;
+  color: white;
+}
+
+button:hover,
+.admin-btn:hover {
+  background: #b71c1c;
+  transform: scale(1.05);
+}
+
+.cart-item button {
+  background: #e53935;
+  color: white;
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* 🔢 دکمه تعداد */
+.qty-btn {
+  padding: 4px 10px;
+  margin: 0 3px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.qty-btn:hover {
+  background: #0d47a1;
+}
+
+/* 🛒 سبد خرید */
+.cart-list {
+  margin-top: 20px;
+}
+
+.cart-item {
+  width: 200px;
+}
+
+/* 📱 واکنش‌گرا برای موبایل */
+@media (max-width: 768px) {
+  header {
+    font-size: 20px;
+  }
+
+  .product,
+  .cart-item {
+    width: 45%;
+  }
+
+  .nav-bar a {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product,
+  .cart-item {
+    width: 90%;
+  }
+
+  .nav-bar {
+    flex-direction: column;
+  }
+
+  .nav-bar a {
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+}
